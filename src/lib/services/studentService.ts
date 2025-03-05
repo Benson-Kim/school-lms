@@ -10,7 +10,8 @@ import logger from "@/lib/utils/logger";
 import { validate } from "@/lib/utils/validation";
 import { ApiError } from "@/lib/utils/api";
 import bcrypt from "bcryptjs";
-import { Student, School } from "@prisma/client"; // Use Prisma-generated types
+import { Student, School, UserRole, AdmissionStatus } from "@prisma/client"; // Use Prisma-generated types
+import { z } from "zod";
 
 /**
  * Registers a new student with document uploads and assigns them to a school.
@@ -75,13 +76,13 @@ export async function registerStudent(formData: FormData): Promise<Student> {
 					create: {
 						email: parsedData.email,
 						passwordHash: await hashPassword(parsedData.password),
-						role: "STUDENT",
+						role: UserRole.STUDENT,
 						firstName: parsedData.firstName,
 						lastName: parsedData.lastName,
 						phoneNumber: parsedData.phoneNumber,
 					},
 				},
-				schoolId: parsedData.schoolId, // Associate with school
+				schoolId: parsedData.schoolId,
 				documents: { create: documentUploads },
 			},
 		});
@@ -153,13 +154,13 @@ export async function bulkEnrollStudents(
 							create: {
 								email: studentData.email,
 								passwordHash: hashedPasswords[index],
-								role: "STUDENT",
+								role: UserRole.STUDENT,
 								firstName: studentData.firstName,
 								lastName: studentData.lastName,
 							},
 						},
 						schoolId: studentData.schoolId, // Associate with school
-						admissionStatus: "ENROLLED",
+						admissionStatus: AdmissionStatus.ENROLLED,
 					},
 				});
 			})
