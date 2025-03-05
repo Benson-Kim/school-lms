@@ -1,0 +1,180 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+    id           String    @id @default(uuid())
+    email        String    @unique
+    passwordHash String
+    role         UserRole
+    firstName    String
+    lastName     String
+    phoneNumber  String?
+    active       Boolean   @default(true)
+    lastLogin    DateTime?
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+    student      Student?
+    parent       Parent? // Relation to Parent
+    staff        Staff? // Relation to Staff (for IT, SUPPORT_STAFF, etc.)
+
+    @@map("users")
+}
+
+enum UserRole {
+    ADMIN
+    TEACHER
+    STUDENT
+    PARENT
+    SUPPORT_STAFF
+    IT
+}
+
+model Student {
+    id               String            @id @default(uuid())
+    studentId        String            @unique
+    dateOfBirth      DateTime
+    gender           String
+    address          String
+    emergencyContact String?
+    medicalInfo      String?
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+    userId           String            @unique
+    user             User              @relation(fields: [userId], references: [id])
+    schoolId         String
+    school           School            @relation(fields: [schoolId], references: [id])
+    admissionStatus  AdmissionStatus   @default(PENDING)
+    documents        StudentDocument[]
+    parents          StudentParent[]
+    classes          Class[]
+
+    @@map("students")
+}
+
+model StudentDocument {
+    id         String   @id @default(uuid())
+    studentId  String
+    student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    fileName   String
+    fileUrl    String // S3 URL or signed URL
+    uploadedAt DateTime @default(now())
+
+    @@map("student_documents")
+}
+
+enum AdmissionStatus {
+    PENDING
+    APPROVED
+    REJECTED
+    ENROLLED
+}
+
+model Parent {
+    id           String          @id @default(uuid())
+    occupation   String?
+    relationship String
+    createdAt    DateTime        @default(now())
+    updatedAt    DateTime        @updatedAt
+    userId       String          @unique
+    user         User            @relation(fields: [userId], references: [id])
+    students     StudentParent[] // Relation to StudentParent
+
+    @@map("parents")
+}
+
+model StudentParent {
+    id        String   @id @default(uuid())
+    isPrimary Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    studentId String
+    student   Student  @relation(fields: [studentId], references: [id])
+    parentId  String
+    parent    Parent   @relation(fields: [parentId], references: [id])
+
+    @@unique([studentId, parentId])
+    @@map("student_parents")
+}
+
+model Class {
+    id        String    @id @default(uuid())
+    name      String
+    active    Boolean   @default(true)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    schoolId  String
+    school    School    @relation(fields: [schoolId], references: [id])
+    students  Student[] // Many-to-many relationship with Student
+
+    @@map("classes")
+}
+
+model School {
+    id        String   @id @default(uuid())
+    name      String
+    address   String
+    city      String?
+    state     String?
+    zipCode   String?
+    country   String
+    phone     String
+    email     String
+    website   String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    departments   Department[]
+    classes       Class[]
+    academicYears AcademicYear[]
+    staff         Staff[]
+    students      Student[]
+
+    @@map("schools")
+}
+
+model Department {
+    id        String   @id @default(uuid())
+    name      String
+    schoolId  String
+    school    School   @relation(fields: [schoolId], references: [id])
+    staff     Staff[] // Many-to-many relationship with Staff
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("departments")
+}
+
+model AcademicYear {
+    id        String   @id @default(uuid())
+    year      String // e.g., "2024-2025"
+    startDate DateTime
+    endDate   DateTime
+    schoolId  String
+    school    School   @relation(fields: [schoolId], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("academic_years")
+}
+
+model Staff {
+    id           String      @id @default(uuid())
+    userId       String      @unique
+    user         User        @relation(fields: [userId], references: [id])
+    schoolId     String
+    school       School      @relation(fields: [schoolId], references: [id])
+    departmentId String?
+    department   Department? @relation(fields: [departmentId], references: [id])
+    role         String // e.g., "Principal", "Teacher", "IT", "Support"
+    createdAt    DateTime    @default(now())
+    updatedAt    DateTime    @updatedAt
+
+    @@map("staff")
+}
