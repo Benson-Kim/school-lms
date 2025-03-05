@@ -19,7 +19,7 @@ export function Navbar() {
 				<div className="space-x-4 flex items-center">
 					{status === "authenticated" ? (
 						<>
-							<span className="text-sm text-[var(--color-mellow-apricot)] w-full block">
+							<span className="text-sm text-[var(--color-mellow-apricot)] ">
 								Welcome, {session.user.name || "User"}
 							</span>
 							<Button

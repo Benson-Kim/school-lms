@@ -55,7 +55,7 @@ export function ModalCard({
 	if (!isOpen) return null;
 
 	return createPortal(
-		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 rounded-lg">
 			<div
 				ref={modalRef}
 				className="w-[80%] sm:w-[80%] md:w-[75%] lg:w-[50%] 2xl:w-[50%] max-h-[90vh] overflow-y-auto"

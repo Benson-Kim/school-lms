@@ -1,51 +1,45 @@
+// src/app/api/it/schools/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/db/prisma";
 import { requireAuth } from "@/lib/utils/api";
-import { ApiError } from "@/lib/utils/api";
 import logger from "@/lib/utils/logger";
 
-interface SchoolData {
-	name: string;
-	address: string;
-	city?: string | null;
-	state?: string | null;
-	zipCode?: string | null;
-	country: string;
-	phone: string;
-	email: string;
-	website?: string | null;
-}
+import {
+	createMultipleSchools,
+	createSchool,
+	getAllSchools,
+} from "@/lib/services/schoolService";
 
 export async function GET(req: NextRequest) {
 	try {
 		const session = await getServerSession(authOptions);
-		requireAuth(session, ["IT"]); // Only allow IT users
+		requireAuth(session, ["IT"]);
 
-		const schools = await prisma.school.findMany({
-			select: {
-				id: true,
-				name: true,
-				address: true,
-				city: true,
-				state: true,
-				zipCode: true,
-				country: true,
-				phone: true,
-				email: true,
-				website: true,
+		const { searchParams } = new URL(req.url);
+		const page = parseInt(searchParams.get("page") || "1");
+		const pageSize = parseInt(searchParams.get("pageSize") || "10");
+		const searchTerm = searchParams.get("search") || "";
+
+		const { schools, total } = await getAllSchools(page, pageSize, searchTerm);
+
+		return NextResponse.json(
+			{
+				schools,
+				pagination: {
+					currentPage: page,
+					pageSize,
+					totalItems: total,
+					totalPages: Math.ceil(total / pageSize),
+				},
 			},
-		});
-
-		return NextResponse.json(schools, { status: 200 });
+			{ status: 200 }
+		);
 	} catch (error) {
-		logger.error(`Failed to fetch schools: ${(error as Error).message}`, {
-			error,
-		});
-		return new ApiError(
-			error instanceof ApiError ? error.message : "Internal Server Error",
-			error instanceof ApiError ? error.status : 500
+		logger.error(`Failed to fetch schools: ${error}`);
+		return NextResponse.json(
+			{ error: "Internal Server Error" },
+			{ status: 500 }
 		);
 	}
 }
@@ -53,35 +47,25 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(authOptions);
-		requireAuth(session, ["IT"]); // Only allow IT users
+		requireAuth(session, ["IT"]);
 
-		const body = (await req.json()) as SchoolData;
-		const school = await prisma.school.create({
-			data: {
-				name: body.name,
-				address: body.address,
-				city: body.city,
-				state: body.state,
-				zipCode: body.zipCode,
-				country: body.country,
-				phone: body.phone,
-				email: body.email,
-				website: body.website,
-			},
-		});
+		const body = await req.json();
 
-		logger.info(`Created school ${school.id}: ${school.name}`);
-		return NextResponse.json(
-			{ school, message: "School created successfully" },
-			{ status: 201 }
-		);
+		// Check if it's a bulk or single school creation
+		if (Array.isArray(body)) {
+			const result = await createMultipleSchools(body);
+			return NextResponse.json(result, {
+				status: result.failed.length > 0 ? 206 : 201,
+			});
+		} else {
+			const school = await createSchool(body);
+			return NextResponse.json(school, { status: 201 });
+		}
 	} catch (error) {
-		logger.error(`Failed to create school: ${(error as Error).message}`, {
-			error,
-		});
-		return new ApiError(
-			error instanceof ApiError ? error.message : "Internal Server Error",
-			error instanceof ApiError ? error.status : 500
+		logger.error(`Failed to create school(s): ${error}`);
+		return NextResponse.json(
+			{ error: "School creation failed" },
+			{ status: 400 }
 		);
 	}
 }

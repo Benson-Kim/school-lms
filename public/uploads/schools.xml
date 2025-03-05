@@ -1,0 +1,35 @@
+<schools>
+  <school>
+    <name>Greenwood High</name>
+    <address>123 Main St</address>
+    <city>Springfield</city>
+    <state>IL</state>
+    <zipCode>62701</zipCode>
+    <country>USA</country>
+    <phone>555-1234</phone>
+    <email>info@greenwood.edu</email>
+    <website>https://greenwood.edu</website>
+  </school>
+  <school>
+    <name>Riverside Academy</name>
+    <address>456 Elm St</address>
+    <city>Riverside</city>
+    <state>CA</state>
+    <zipCode>92501</zipCode>
+    <country>USA</country>
+    <phone>555-5678</phone>
+    <email>contact@riverside.edu</email>
+    <website>https://riverside.edu</website>
+  </school>
+  <school>
+    <name>Sunrise School</name>
+    <address>789 Oak St</address>
+    <city></city>
+    <state></state>
+    <zipCode>12345</zipCode>
+    <country>Canada</country>
+    <phone>555-9012</phone>
+    <email>support@sunrise.edu</email>
+    <website></website>
+  </school>
+</schools>

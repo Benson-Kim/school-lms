@@ -1,0 +1,35 @@
+[
+	{
+		"name": "Greenwood High",
+		"address": "123 Main St",
+		"city": "Springfield",
+		"state": "IL",
+		"zipCode": "62701",
+		"country": "USA",
+		"phone": "555-1234",
+		"email": "info@greenwood.edu",
+		"website": "https://greenwood.edu"
+	},
+	{
+		"name": "Riverside Academy",
+		"address": "456 Elm St",
+		"city": "Riverside",
+		"state": "CA",
+		"zipCode": "92501",
+		"country": "USA",
+		"phone": "555-5678",
+		"email": "contact@riverside.edu",
+		"website": "https://riverside.edu"
+	},
+	{
+		"name": "Sunrise School",
+		"address": "789 Oak St",
+		"city": null,
+		"state": null,
+		"zipCode": "12345",
+		"country": "Canada",
+		"phone": "555-9012",
+		"email": "support@sunrise.edu",
+		"website": null
+	}
+]

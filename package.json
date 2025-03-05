@@ -17,8 +17,10 @@
 		"aws-sdk": "^2.1692.0",
 		"bcryptjs": "^3.0.2",
 		"dexie": "^4.0.11",
+		"fast-xml-parser": "^5.0.8",
 		"next": "15.2.1",
 		"next-auth": "^4.24.11",
+		"papaparse": "^5.5.2",
 		"prisma": "^6.4.1",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
@@ -28,6 +30,7 @@
 		"swr": "^2.3.2",
 		"uuid": "^11.1.0",
 		"winston": "^3.17.0",
+		"xml2js": "^0.6.2",
 		"zod": "^3.24.2"
 	},
 	"devDependencies": {
@@ -35,6 +38,7 @@
 		"@tailwindcss/postcss": "^4",
 		"@types/aws-sdk": "^0.0.42",
 		"@types/node": "^20",
+		"@types/papaparse": "^5.3.15",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
 		"@types/uuid": "^10.0.0",
