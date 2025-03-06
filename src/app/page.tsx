@@ -11,6 +11,9 @@ import useSWR from "swr";
 import { sidebarItemsByRole } from "@/config/SidebarItems";
 
 import { RiRefreshLine } from "react-icons/ri";
+import Loading from "@/components/ui/Loading";
+import { DashboardStats } from "@/components/ui/DashboardStats";
+import { DashboardCard } from "@/components/ui/DashboardCard";
 // Type for dashboard data with flexible structure
 interface DashboardData {
 	[key: string]: number | string | undefined;
@@ -36,7 +39,7 @@ export default function Home() {
 		error: dataFetchError,
 		isLoading: isDashboardLoading,
 	} = useSWR<DashboardData>(
-		role ? `/api/dashboard/${role.toLowerCase()}` : null,
+		role ? `/api/${role.toLowerCase()}/dashboard` : null,
 		fetcher,
 		{
 			revalidateOnFocus: false,
@@ -60,16 +63,7 @@ export default function Home() {
 
 	// Loading states
 	if (status === "loading" || isRoleLoading || isDashboardLoading) {
-		return (
-			<div className="flex justify-center items-center h-screen">
-				<div className="text-center">
-					<span className="loading-spinner mr-2">
-						<RiRefreshLine className="animate-spin" />
-					</span>
-					Loading dashboard...
-				</div>
-			</div>
-		);
+		<Loading size={48} text="Retrieving data" />;
 	}
 
 	// Error handling
@@ -92,59 +86,24 @@ export default function Home() {
 
 			<h1 className="text-3xl font-bold mb-6">{role} Dashboard</h1>
 
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				{/* User Information Card */}
-				<Card title="User Profile" className="p-4">
-					<h2 className="text-xl font-semibold mb-2">
-						Welcome, {session?.user?.name || "User"}!
-					</h2>
-					<p className="mb-4">Role: {role}</p>
-
-					{/* Quick Access Navigation */}
-					<div className="space-y-2">
-						{dashboardTiles.map((tile) => (
-							<Button
-								key={tile.href}
-								onClick={() => router.push(tile.href)}
-								className="w-full"
-								variant="secondary"
-							>
-								<tile.icon className="mr-2" />
-								{tile.name}
-							</Button>
-						))}
-					</div>
-				</Card>
-
+			<div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
 				{/* Dynamic Dashboard Stats */}
-				<Card title="Dashboard Overview" className="p-4">
-					{dashboardData ? (
-						Object.entries(dashboardData).map(([key, value]) => (
-							<p key={key} className="mb-2">
-								{key
-									.replace(/([A-Z])/g, " $1")
-									.replace(/^./, (str) => str.toUpperCase())}
-								: {value}
-							</p>
-						))
-					) : (
-						<p className="text-gray-500">
-							No dashboard statistics available for {role} role.
-						</p>
-					)}
-				</Card>
-			</div>
-
-			{/* Sign Out Action */}
-			<div className="mt-4 flex justify-end">
-				<Button
-					onClick={() =>
-						signOut({ redirect: true, callbackUrl: "/auth/signin" })
-					}
-					variant="destructive"
-				>
-					Sign Out
-				</Button>
+				{dashboardData ? (
+					Object.entries(dashboardData).map(([key, value]) => (
+						<DashboardCard
+							key={key}
+							title={key
+								.replace(/([A-Z])/g, " $1")
+								.replace(/^./, (str) => str.toUpperCase())}
+						>
+							<p className="text-lg p-4">{value}</p>
+						</DashboardCard>
+					))
+				) : (
+					<p className="text-gray-500">
+						No dashboard statistics available for {role} role.
+					</p>
+				)}
 			</div>
 		</div>
 	);

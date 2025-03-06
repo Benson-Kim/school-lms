@@ -12,8 +12,8 @@ export function Card({ title, children, className = "", onClose }: CardProps) {
 		<div
 			className={`bg-white rounded-lg shadow-md border border-gray-200 ${className}`}
 		>
-			<div className="bg-fuchsia-100 px-6 py-4 flex justify-between items-center mb-4">
-				<h2 className="text-xl font-semibold text-charcoal">{title}</h2>
+			<div className="bg-[var(--color-secondary)] text-[var(--color-secondary-foreground)] px-6 py-4 flex justify-between items-center mb-4">
+				<h2 className="text-xl font-medium text-charcoal">{title}</h2>
 				{onClose && (
 					<button
 						onClick={onClose}

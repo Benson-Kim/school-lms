@@ -16,7 +16,7 @@ export function DashboardStats({
 }: DashboardStatsProps) {
 	return (
 		<Card title={title} className={`cursor-pointer ${className}`}>
-			<p className="text-2xl p-4">{value}</p>
+			<p className="text-xl p-4">{value}</p>
 		</Card>
 	);
 }

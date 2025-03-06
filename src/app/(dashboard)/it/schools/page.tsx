@@ -20,10 +20,10 @@ import {
 	TableRow,
 	TableHead,
 	TableCell,
-	TableCaption,
 } from "@/components/ui/Table";
 import { Input } from "@/components/ui/Input";
 import { Checkbox } from "@/components/ui/Checkbox";
+import Loading from "@/components/ui/Loading";
 
 // Fetcher function with error handling
 const fetcher = async (url: string) => {
@@ -722,7 +722,7 @@ export default function SchoolManagement() {
 
 	// Render logic with pagination and error handling
 	if (status === "loading") {
-		return <div className="text-center p-4">Loading...</div>;
+		<Loading text="Loading ..." />;
 	}
 
 	if (status === "unauthenticated" || session?.user.role !== "IT") {

@@ -28,6 +28,7 @@ const VALID_ENTITY_TYPES = [
 	"teacher",
 	"attendance",
 	"grade",
+	"curriculum",
 ] as const;
 type EntityType = (typeof VALID_ENTITY_TYPES)[number];
 

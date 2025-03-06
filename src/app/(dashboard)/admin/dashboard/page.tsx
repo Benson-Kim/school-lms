@@ -86,29 +86,24 @@ export default function AdminDashboard() {
 		<div className="container mx-auto p-4">
 			<OfflineIndicator />
 			<div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
-				<DashboardStats
+				<DashboardCard
 					title="Total Students"
-					value={dashboardData?.totalStudents || 0}
-					onClick={() =>
-						openModal(`Total Students: ${dashboardData?.totalStudents || 0}`)
-					}
-				/>
-				<DashboardStats
+					onClick={() => router.push("/admin/students")}
+				>
+					<p className="text-lg p-4">{dashboardData?.totalStudents || 0}</p>
+				</DashboardCard>
+				<DashboardCard
 					title="Active Classes"
-					value={dashboardData?.activeClasses || 0}
-					onClick={() =>
-						openModal(`Active Classes: ${dashboardData?.activeClasses || 0}`)
-					}
-				/>
-				<DashboardStats
+					onClick={() => router.push("/admin/students")}
+				>
+					<p className="text-lg p-4">{dashboardData?.activeClasses || 0}</p>
+				</DashboardCard>
+				<DashboardCard
 					title="Pending Admissions"
-					value={dashboardData?.pendingAdmissions || 0}
-					onClick={() =>
-						openModal(
-							`Pending Admissions: ${dashboardData?.pendingAdmissions || 0}`
-						)
-					}
-				/>
+					onClick={() => router.push("/admin/students")}
+				>
+					<p className="text-lg p-4">{dashboardData?.pendingAdmissions || 0}</p>
+				</DashboardCard>
 			</div>
 
 			<Button

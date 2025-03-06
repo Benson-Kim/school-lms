@@ -35,3 +35,86 @@
 {"level":"error","message":"Failed to fetch schools: Error: Schools retrieval failed: PrismaClientKnownRequestError: \nInvalid `prisma.school.findMany()` invocation:\n\n\nCannot fetch data from service:\nfetch failed","timestamp":"2025-03-05T17:45:49.956Z"}
 {"level":"error","message":"Failed to retrieve schools: PrismaClientKnownRequestError: \nInvalid `prisma.school.findMany()` invocation:\n\n\nCannot fetch data from service:\nfetch failed","timestamp":"2025-03-05T17:45:55.597Z"}
 {"level":"error","message":"Failed to fetch schools: Error: Schools retrieval failed: PrismaClientKnownRequestError: \nInvalid `prisma.school.findMany()` invocation:\n\n\nCannot fetch data from service:\nfetch failed","timestamp":"2025-03-05T17:45:55.611Z"}
+{"error":{},"level":"error","message":"Unexpected Error: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:11:23.865Z"}
+{"error":{},"level":"error","message":"Unexpected Error: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:25:22.436Z"}
+{"error":{},"level":"error","message":"Unexpected Error: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:25:39.458Z"}
+{"level":"error","message":"Failed to fetch curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:30:31.657Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:54:26.156Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:54:26.160Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:54:31.208Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:54:31.210Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:54:56.722Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:54:56.723Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:55:16.950Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:55:16.951Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:57:07.010Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:57:07.011Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:58:37.047Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T09:58:37.049Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:01:47.328Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:01:47.329Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:04:32.075Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:04:32.082Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:04:42.118Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:04:42.120Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:05:02.528Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:05:02.531Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:05:15.510Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:05:15.512Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:05:20.657Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:05:20.659Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:05:30.902Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:05:30.903Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:06:25.945Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:06:25.947Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:08:06.392Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:08:06.402Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:12:01.493Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:12:01.495Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:18:06.558Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:18:06.560Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:19:25.336Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:19:25.340Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:19:35.403Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:19:35.404Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:19:50.503Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:19:50.506Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:20:25.556Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:20:25.558Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:21:25.591Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:21:25.592Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:23:15.629Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:23:15.633Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:29:10.712Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:29:10.714Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:29:39.352Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:29:39.353Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Unauthorized","timestamp":"2025-03-06T10:30:05.947Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:38:25.832Z"}
+{"level":"error","message":"Failed to fetch curricula: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T10:38:25.834Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Unauthorized","timestamp":"2025-03-06T10:58:40.707Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Unauthorized","timestamp":"2025-03-06T10:59:23.471Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Unauthorized","timestamp":"2025-03-06T10:59:29.680Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Unauthorized","timestamp":"2025-03-06T11:00:24.399Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:03:54.561Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:03:54.566Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:04:04.632Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:04:04.634Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:04:14.716Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:04:14.717Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:04:44.759Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:04:44.761Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:05:30.066Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:05:30.070Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:05:40.216Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:05:40.219Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:05:55.339Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:05:55.340Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:06:31.031Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:06:31.034Z"}
+{"level":"error","message":"Failed to retrieve curricula: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:08:21.281Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Curricula retrieval failed: TypeError: Cannot read properties of undefined (reading 'findMany')","timestamp":"2025-03-06T11:08:21.282Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Unauthorized","timestamp":"2025-03-06T11:19:13.906Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Unauthorized","timestamp":"2025-03-06T11:19:23.943Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Unauthorized","timestamp":"2025-03-06T11:19:33.992Z"}
+{"level":"error","message":"Failed to fetch schools: Error: Unauthorized","timestamp":"2025-03-06T11:20:29.339Z"}

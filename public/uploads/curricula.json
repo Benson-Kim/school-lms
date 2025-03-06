@@ -1,0 +1,14 @@
+[
+	{
+		"name": "Mathematics Curriculum",
+		"description": "A comprehensive math curriculum for grades 1-6"
+	},
+	{
+		"name": "Science Curriculum",
+		"description": "Basic science concepts for elementary students"
+	},
+	{
+		"name": "History Curriculum",
+		"description": null
+	}
+]
