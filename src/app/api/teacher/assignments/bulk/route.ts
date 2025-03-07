@@ -1,0 +1,61 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { requireAuth } from "@/lib/utils/api";
+import logger from "@/lib/utils/logger";
+import {
+  createMultipleAssignments,
+  updateMultipleAssignments,
+  deleteMultipleAssignments,
+} from "@/lib/services/assignmentService";
+
+export async function PUT(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    requireAuth(session, ["TEACHER"]);
+    const assignments = await req.json();
+    const result = await updateMultipleAssignments(assignments);
+    return NextResponse.json(result, {
+      status: result.failed.length > 0 ? 206 : 200,
+    });
+  } catch (error) {
+    logger.error(`Failed to update multiple assignments: ${error}`);
+    return NextResponse.json(
+      { error: "Bulk assignment update failed" },
+      { status: 400 },
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    requireAuth(session, ["TEACHER"]);
+    const { ids } = await req.json();
+    const result = await deleteMultipleAssignments(ids);
+    return NextResponse.json(result, {
+      status: result.failed.length > 0 ? 206 : 200,
+    });
+  } catch (error) {
+    logger.error(`Failed to delete multiple assignments: ${error}`);
+    return NextResponse.json(
+      { error: "Bulk assignment deletion failed" },
+      { status: 400 },
+    );
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    requireAuth(session, ["TEACHER"]);
+    const assignments = await req.json();
+    const result = await createMultipleAssignments(assignments);
+    return NextResponse.json(result, {
+      status: result.failed.length > 0 ? 206 : 201,
+    });
+  } catch (error) {
+    logger.error(`Failed to create multiple assignments: ${error}`);
+    return NextResponse.json({ error: "Bulk import failed" }, { status: 400 });
+  }
+}

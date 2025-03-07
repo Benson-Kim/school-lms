@@ -13,34 +13,34 @@ import { ApiError } from "@/lib/utils/api";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "School Management System",
-	description:
-		"A comprehensive platform for school administration and education",
+  title: "School Management System",
+  description:
+    "A comprehensive platform for school administration and education",
 };
 
 export default async function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	try {
-		// Fetch session on the server side
-		const session = await getServerSession(authOptions);
+  try {
+    // Fetch session on the server side
+    const session = await getServerSession(authOptions);
 
-		return (
-			<html lang="en">
-				<body className={inter.className}>
-					<ClientLayoutWrapper session={session}>
-						{children}
-					</ClientLayoutWrapper>
-				</body>
-			</html>
-		);
-	} catch (error) {
-		logger.error(`Layout error: ${(error as Error).message}`, { error });
-		throw new ApiError(
-			`Failed to load layout: ${(error as Error).message}`,
-			500
-		);
-	}
+    return (
+      <html lang="en">
+        <body className={inter.className}>
+          <ClientLayoutWrapper session={session}>
+            {children}
+          </ClientLayoutWrapper>
+        </body>
+      </html>
+    );
+  } catch (error) {
+    logger.error(`Layout error: ${(error as Error).message}`, { error });
+    throw new ApiError(
+      `Failed to load layout: ${(error as Error).message}`,
+      500,
+    );
+  }
 }

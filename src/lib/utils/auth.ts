@@ -6,13 +6,13 @@ import { Session } from "next-auth";
  * Custom error class for API errors with HTTP status codes.
  */
 export class ApiError extends Error {
-	status: number;
+  status: number;
 
-	constructor(message: string, status: number = 400) {
-		super(message);
-		this.status = status;
-		this.name = "ApiError"; // Ensure proper error name for instanceof checks
-	}
+  constructor(message: string, status: number = 400) {
+    super(message);
+    this.status = status;
+    this.name = "ApiError"; // Ensure proper error name for instanceof checks
+  }
 }
 
 /**
@@ -23,18 +23,18 @@ export class ApiError extends Error {
  * @throws ApiError if data is not JSON-serializable
  */
 export function successResponse<T>(
-	data: T,
-	status: number = 200
+  data: T,
+  status: number = 200,
 ): NextResponse {
-	try {
-		return NextResponse.json(data, { status });
-	} catch (error) {
-		logger.error(
-			`Failed to serialize success response: ${(error as Error).message}`,
-			{ error }
-		);
-		throw new ApiError("Invalid response data: not JSON-serializable", 500);
-	}
+  try {
+    return NextResponse.json(data, { status });
+  } catch (error) {
+    logger.error(
+      `Failed to serialize success response: ${(error as Error).message}`,
+      { error },
+    );
+    throw new ApiError("Invalid response data: not JSON-serializable", 500);
+  }
 }
 
 /**
@@ -44,24 +44,24 @@ export function successResponse<T>(
  * @returns NextResponse with JSON error payload
  */
 export function errorResponse(
-	error: unknown,
-	defaultMessage: string = "Internal Server Error"
+  error: unknown,
+  defaultMessage: string = "Internal Server Error",
 ): NextResponse {
-	if (error instanceof ApiError) {
-		logger.warn(`API Error: ${error.message}`, { status: error.status });
-		return NextResponse.json(
-			{ error: error.message },
-			{ status: error.status }
-		);
-	}
+  if (error instanceof ApiError) {
+    logger.warn(`API Error: ${error.message}`, { status: error.status });
+    return NextResponse.json(
+      { error: error.message },
+      { status: error.status },
+    );
+  }
 
-	logger.error(
-		`Unexpected Error: ${
-			error instanceof Error ? error.message : String(error)
-		}`,
-		{ error }
-	);
-	return NextResponse.json({ error: defaultMessage }, { status: 500 });
+  logger.error(
+    `Unexpected Error: ${
+      error instanceof Error ? error.message : String(error)
+    }`,
+    { error },
+  );
+  return NextResponse.json({ error: defaultMessage }, { status: 500 });
 }
 
 /**
@@ -71,17 +71,17 @@ export function errorResponse(
  * @throws ApiError if session is missing or user lacks required role
  */
 export function requireAuth(
-	session: Session | null,
-	allowedRoles: string[]
+  session: Session | null,
+  allowedRoles: string[],
 ): void {
-	if (!session?.user || !allowedRoles.includes(session.user.role)) {
-		throw new ApiError("Unauthorized", 403);
-	}
+  if (!session?.user || !allowedRoles.includes(session.user.role)) {
+    throw new ApiError("Unauthorized", 403);
+  }
 
-	// Validate allowedRoles to ensure they are non-empty strings
-	if (
-		!allowedRoles.every((role) => typeof role === "string" && role.length > 0)
-	) {
-		throw new ApiError("Invalid roles specified", 500);
-	}
+  // Validate allowedRoles to ensure they are non-empty strings
+  if (
+    !allowedRoles.every((role) => typeof role === "string" && role.length > 0)
+  ) {
+    throw new ApiError("Invalid roles specified", 500);
+  }
 }

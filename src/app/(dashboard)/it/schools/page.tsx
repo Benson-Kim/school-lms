@@ -894,6 +894,9 @@ export default function SchoolManagement() {
 							<TableCell>
 								<div className="flex space-x-2">
 									<Button size="sm" onClick={() => openModal("view", school)}>
+										Manage
+									</Button>
+									<Button size="sm" onClick={() => openModal("view", school)}>
 										View
 									</Button>
 									<Button

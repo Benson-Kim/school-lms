@@ -23,6 +23,14 @@ const authOptions: NextAuthOptions = {
 
 				const user = await prisma.user.findUnique({
 					where: { email: parsedCredentials.email },
+					select: {
+						id: true,
+						email: true,
+						passwordHash: true,
+						role: true,
+						firstName: true,
+						schoolId: true,
+					},
 				});
 
 				if (
@@ -37,7 +45,8 @@ const authOptions: NextAuthOptions = {
 					role: user.role,
 					email: user.email,
 					name: user.firstName,
-				} as User;
+					schoolId: user.schoolId || undefined,
+				} as User & { schoolId?: string };
 			},
 		}),
 	],
@@ -53,6 +62,9 @@ const authOptions: NextAuthOptions = {
 				token.id = user.id;
 				token.role = user.role;
 				token.name = user.name;
+				if (user.schoolId) {
+					token.schoolId = user.schoolId; // Add schoolId to JWT
+				}
 			}
 			return token;
 		},
@@ -61,15 +73,18 @@ const authOptions: NextAuthOptions = {
 				session.user.id = token.id as string;
 				session.user.role = token.role as string;
 				session.user.name = token.name as string;
+				if (token.schoolId) {
+					session.user.schoolId = token.schoolId as string; // Add schoolId to session
+				}
 			}
 			return session;
 		},
 	},
 	secret: process.env.NEXTAUTH_SECRET,
 	pages: {
-		signIn: "/auth/signin", // Ensure the sign-in page is correctly set
+		signIn: "/auth/signin",
 	},
-	debug: true, // Debug mode to track errors
+	debug: true,
 };
 
 /**

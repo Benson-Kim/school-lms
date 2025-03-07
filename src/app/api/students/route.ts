@@ -7,30 +7,30 @@ import { ApiError } from "@/lib/utils/api";
 import logger from "@/lib/utils/logger";
 
 export async function GET(req: NextRequest) {
-	try {
-		const session = await getServerSession(authOptions);
-		requireAuth(session, ["ADMIN"]); // Only allow admins
+  try {
+    const session = await getServerSession(authOptions);
+    requireAuth(session, ["ADMIN"]); // Only allow admins
 
-		const students = await prisma.student.findMany({
-			select: {
-				studentId: true,
-				user: {
-					select: {
-						firstName: true,
-						lastName: true,
-					},
-				},
-			},
-		});
+    const students = await prisma.student.findMany({
+      select: {
+        studentId: true,
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
 
-		return NextResponse.json(students, { status: 200 });
-	} catch (error) {
-		logger.error(`Failed to fetch students: ${(error as Error).message}`, {
-			error,
-		});
-		return new ApiError(
-			error instanceof ApiError ? error.message : "Internal Server Error",
-			error instanceof ApiError ? error.status : 500
-		);
-	}
+    return NextResponse.json(students, { status: 200 });
+  } catch (error) {
+    logger.error(`Failed to fetch students: ${(error as Error).message}`, {
+      error,
+    });
+    return new ApiError(
+      error instanceof ApiError ? error.message : "Internal Server Error",
+      error instanceof ApiError ? error.status : 500,
+    );
+  }
 }
