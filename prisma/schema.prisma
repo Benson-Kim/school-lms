@@ -7,22 +7,26 @@ generator client {
     provider = "prisma-client-js"
 }
 
-// Existing Models (unchanged unless noted)
 model User {
-    id           String    @id @default(uuid())
-    email        String    @unique
-    passwordHash String
-    role         UserRole
-    firstName    String
-    lastName     String
-    phoneNumber  String?
-    active       Boolean   @default(true)
-    lastLogin    DateTime?
-    createdAt    DateTime  @default(now())
-    updatedAt    DateTime  @updatedAt
-    student      Student?
-    parent       Parent?
-    staff        Staff?
+    id               String         @id @default(uuid())
+    email            String         @unique
+    passwordHash     String
+    role             UserRole
+    firstName        String
+    lastName         String
+    phoneNumber      String?
+    active           Boolean        @default(true)
+    lastLogin        DateTime?
+    createdAt        DateTime       @default(now())
+    updatedAt        DateTime       @updatedAt
+    student          Student?
+    parent           Parent?
+    staff            Staff?
+    schoolId         String?        @map("school_id")
+    school           School?        @relation(fields: [schoolId], references: [id])
+    sentMessages     Message[]      @relation("SentMessages")
+    receivedMessages Message[]      @relation("ReceivedMessages")
+    notifications    Notification[]
 
     @@map("users")
 }
@@ -37,23 +41,31 @@ enum UserRole {
 }
 
 model Student {
-    id               String            @id @default(uuid())
-    studentId        String            @unique
-    dateOfBirth      DateTime
-    gender           String
-    address          String
-    emergencyContact String?
-    medicalInfo      String?
-    createdAt        DateTime          @default(now())
-    updatedAt        DateTime          @updatedAt
-    userId           String            @unique
-    user             User              @relation(fields: [userId], references: [id])
-    schoolId         String
-    school           School            @relation(fields: [schoolId], references: [id])
-    admissionStatus  AdmissionStatus   @default(PENDING)
-    documents        StudentDocument[]
-    parents          StudentParent[]
-    classes          Class[]
+    id                String              @id @default(uuid())
+    studentId         String              @unique
+    dateOfBirth       DateTime
+    gender            String
+    address           String
+    emergencyContact  String?
+    medicalInfo       String?
+    createdAt         DateTime            @default(now())
+    updatedAt         DateTime            @updatedAt
+    userId            String              @unique
+    user              User                @relation(fields: [userId], references: [id])
+    schoolId          String
+    school            School              @relation(fields: [schoolId], references: [id])
+    admissionStatus   AdmissionStatus     @default(PENDING)
+    documents         StudentDocument[]
+    parents           StudentParent[]
+    classes           Class[]
+    attendance        Attendance[]
+    assignments       StudentAssignment[]
+    examResults       ExamResult[]
+    quizResults       QuizResult[]
+    schedule          Schedule[]
+    libraryBorrowings LibraryBorrowing[]
+    payments          Payment[]
+    healthRecords     HealthRecord[]
 
     @@map("students")
 }
@@ -85,6 +97,7 @@ model Parent {
     userId       String          @unique
     user         User            @relation(fields: [userId], references: [id])
     students     StudentParent[]
+    payments     Payment[]       @relation("ParentPayments")
 
     @@map("parents")
 }
@@ -104,36 +117,48 @@ model StudentParent {
 }
 
 model Class {
-    id        String    @id @default(uuid())
-    name      String
-    active    Boolean   @default(true)
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    schoolId  String
-    school    School    @relation(fields: [schoolId], references: [id])
-    students  Student[]
+    id          String       @id @default(uuid())
+    name        String
+    active      Boolean      @default(true)
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    schoolId    String
+    school      School       @relation(fields: [schoolId], references: [id])
+    students    Student[]
+    assignments Assignment[]
+    exams       Exam[]
+    quizzes     Quiz[]
+    schedule    Schedule[]
+    course      Course?      @relation(fields: [courseId], references: [id])
+    courseId    String?
 
     @@map("classes")
 }
 
 model School {
-    id            String         @id @default(uuid())
-    name          String
-    address       String
-    city          String?
-    state         String?
-    zipCode       String?
-    country       String
-    phone         String
-    email         String
-    website       String?
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
-    departments   Department[]
-    classes       Class[]
-    academicYears AcademicYear[]
-    staff         Staff[]
-    students      Student[]
+    id                  String               @id @default(uuid())
+    name                String
+    address             String
+    city                String?
+    state               String?
+    zipCode             String?
+    country             String
+    phone               String
+    email               String
+    website             String?
+    createdAt           DateTime             @default(now())
+    updatedAt           DateTime             @updatedAt
+    departments         Department[]
+    classes             Class[]
+    academicYears       AcademicYear[]
+    staff               Staff[]
+    students            Student[]
+    users               User[]
+    events              Event[]
+    inventory           InventoryItem[]
+    libraryItems        LibraryItem[]
+    vehicles            TransportVehicle[]
+    maintenanceRequests MaintenanceRequest[]
 
     @@map("schools")
 }
@@ -164,16 +189,17 @@ model AcademicYear {
 }
 
 model Staff {
-    id           String      @id @default(uuid())
-    userId       String      @unique
-    user         User        @relation(fields: [userId], references: [id])
-    schoolId     String
-    school       School      @relation(fields: [schoolId], references: [id])
-    departmentId String?
-    department   Department? @relation(fields: [departmentId], references: [id])
-    role         String
-    createdAt    DateTime    @default(now())
-    updatedAt    DateTime    @updatedAt
+    id                  String               @id @default(uuid())
+    userId              String               @unique
+    user                User                 @relation(fields: [userId], references: [id])
+    schoolId            String
+    school              School               @relation(fields: [schoolId], references: [id])
+    departmentId        String?
+    department          Department?          @relation(fields: [departmentId], references: [id])
+    role                String
+    createdAt           DateTime             @default(now())
+    updatedAt           DateTime             @updatedAt
+    maintenanceRequests MaintenanceRequest[] @relation("AssignedStaff")
 
     @@map("staff")
 }
@@ -207,6 +233,7 @@ model Subject {
     topics       Topic[] // One-to-many relation with Topic
     createdAt    DateTime   @default(now())
     updatedAt    DateTime   @updatedAt
+    courses      Course[]
 }
 
 model Topic {
@@ -248,4 +275,384 @@ model EducationalStandard {
     createdAt   DateTime            @default(now())
     updatedAt   DateTime            @updatedAt
     alignments  StandardAlignment[]
+}
+
+// Assessment Models
+model Assignment {
+    id                 String              @id @default(uuid())
+    title              String
+    description        String?
+    dueDate            DateTime
+    classId            String
+    class              Class               @relation(fields: [classId], references: [id])
+    points             Float
+    createdAt          DateTime            @default(now())
+    updatedAt          DateTime            @updatedAt
+    studentAssignments StudentAssignment[]
+}
+
+model StudentAssignment {
+    id           String     @id @default(uuid())
+    studentId    String
+    student      Student    @relation(fields: [studentId], references: [id])
+    assignmentId String
+    assignment   Assignment @relation(fields: [assignmentId], references: [id])
+    score        Float?
+    submittedAt  DateTime?
+    status       String     @default("PENDING") // PENDING, SUBMITTED, GRADED
+    feedback     String?
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+
+    @@unique([studentId, assignmentId])
+    @@map("student_assignments")
+}
+
+model Exam {
+    id          String       @id @default(uuid())
+    title       String
+    description String?
+    examDate    DateTime
+    classId     String
+    class       Class        @relation(fields: [classId], references: [id])
+    totalMarks  Float
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    results     ExamResult[]
+}
+
+model ExamResult {
+    id        String   @id @default(uuid())
+    examId    String
+    exam      Exam     @relation(fields: [examId], references: [id])
+    studentId String
+    student   Student  @relation(fields: [studentId], references: [id])
+    marks     Float
+    feedback  String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([examId, studentId])
+    @@map("exam_results")
+}
+
+model Quiz {
+    id          String       @id @default(uuid())
+    title       String
+    description String?
+    dueDate     DateTime
+    classId     String
+    class       Class        @relation(fields: [classId], references: [id])
+    points      Float
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    results     QuizResult[]
+}
+
+model QuizResult {
+    id        String   @id @default(uuid())
+    quizId    String
+    quiz      Quiz     @relation(fields: [quizId], references: [id])
+    studentId String
+    student   Student  @relation(fields: [studentId], references: [id])
+    score     Float
+    feedback  String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([quizId, studentId])
+    @@map("quiz_results")
+}
+
+// Communication Models
+model Message {
+    id          String   @id @default(uuid())
+    subject     String
+    content     String
+    senderId    String
+    sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+    recipientId String
+    recipient   User     @relation("ReceivedMessages", fields: [recipientId], references: [id])
+    isRead      Boolean  @default(false)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("messages")
+}
+
+model Notification {
+    id        String   @id @default(uuid())
+    title     String
+    message   String
+    userId    String
+    user      User     @relation(fields: [userId], references: [id])
+    isRead    Boolean  @default(false)
+    type      String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("notifications")
+}
+
+// Event Model
+model Event {
+    id          String   @id @default(uuid())
+    title       String
+    description String?
+    startDate   DateTime
+    endDate     DateTime
+    location    String?
+    schoolId    String
+    school      School   @relation(fields: [schoolId], references: [id])
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("events")
+}
+
+// Finance Model
+model Payment {
+    id            String   @id @default(uuid())
+    amount        Float
+    description   String
+    paymentDate   DateTime
+    studentId     String
+    student       Student  @relation(fields: [studentId], references: [id])
+    payerId       String
+    payer         Parent   @relation("ParentPayments", fields: [payerId], references: [id])
+    paymentMethod String
+    status        String
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    @@map("payments")
+}
+
+// Attendance Model
+model Attendance {
+    id        String   @id @default(uuid())
+    date      DateTime
+    status    String // PRESENT, ABSENT, TARDY, EXCUSED
+    studentId String
+    student   Student  @relation(fields: [studentId], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([date, studentId])
+    @@map("attendance")
+}
+
+// Schedule Model
+model Schedule {
+    id        String   @id @default(uuid())
+    day       String
+    startTime DateTime
+    endTime   DateTime
+    classId   String
+    class     Class    @relation(fields: [classId], references: [id])
+    studentId String
+    student   Student  @relation(fields: [studentId], references: [id])
+    room      String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("schedules")
+}
+
+// Library Models
+model LibraryItem {
+    id            String             @id @default(uuid())
+    title         String
+    author        String?
+    isbn          String?
+    category      String
+    publishedDate DateTime?
+    description   String?
+    quantity      Int
+    available     Int
+    schoolId      String
+    school        School             @relation(fields: [schoolId], references: [id])
+    borrowings    LibraryBorrowing[]
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime           @updatedAt
+
+    @@map("library_items")
+}
+
+model LibraryBorrowing {
+    id         String      @id @default(uuid())
+    itemId     String
+    item       LibraryItem @relation(fields: [itemId], references: [id])
+    studentId  String
+    student    Student     @relation(fields: [studentId], references: [id])
+    borrowDate DateTime
+    dueDate    DateTime
+    returnDate DateTime?
+    status     String      @default("BORROWED") // BORROWED, RETURNED, OVERDUE
+    createdAt  DateTime    @default(now())
+    updatedAt  DateTime    @updatedAt
+
+    @@map("library_borrowings")
+}
+
+// Course Model
+model Course {
+    id          String   @id @default(uuid())
+    name        String
+    description String?
+    subjectId   String
+    subject     Subject  @relation(fields: [subjectId], references: [id])
+    classes     Class[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("courses")
+}
+
+// Support Staff Models
+model HealthRecord {
+    id          String   @id @default(uuid())
+    date        DateTime
+    description String
+    treatment   String?
+    studentId   String
+    student     Student  @relation(fields: [studentId], references: [id])
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("health_records")
+}
+
+model InventoryItem {
+    id          String   @id @default(uuid())
+    name        String
+    category    String
+    quantity    Int
+    location    String?
+    description String?
+    schoolId    String
+    school      School   @relation(fields: [schoolId], references: [id])
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("inventory_items")
+}
+
+model MaintenanceRequest {
+    id            String    @id @default(uuid())
+    title         String
+    description   String
+    location      String
+    priority      String    @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+    status        String    @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+    schoolId      String
+    school        School    @relation(fields: [schoolId], references: [id])
+    assignedTo    String?
+    assignedStaff Staff?    @relation("AssignedStaff", fields: [assignedTo], references: [id])
+    completedAt   DateTime?
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+
+    @@map("maintenance_requests")
+}
+
+model TransportVehicle {
+    id            String        @id @default(uuid())
+    vehicleNumber String
+    type          String
+    capacity      Int
+    driver        String?
+    route         String?
+    schoolId      String
+    school        School        @relation(fields: [schoolId], references: [id])
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
+    routes        RouteDetail[]
+
+    @@map("transport_vehicles")
+}
+
+model RouteDetail {
+    id            String           @id @default(uuid())
+    name          String
+    description   String?
+    startLocation String
+    endLocation   String
+    departureTime DateTime
+    arrivalTime   DateTime
+    vehicleId     String
+    vehicle       TransportVehicle @relation(fields: [vehicleId], references: [id])
+    createdAt     DateTime         @default(now())
+    updatedAt     DateTime         @updatedAt
+
+    @@map("route_details")
+}
+
+// IT Management Models
+model SystemConfiguration {
+    id          String   @id @default(uuid())
+    name        String
+    value       String
+    description String?
+    category    String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@unique([name, category])
+    @@map("system_configurations")
+}
+
+model SecurityLog {
+    id        String   @id @default(uuid())
+    action    String
+    userId    String?
+    ipAddress String?
+    details   String?
+    timestamp DateTime @default(now())
+
+    @@map("security_logs")
+}
+
+model Integration {
+    id          String   @id @default(uuid())
+    name        String
+    type        String
+    config      String? // JSON configuration
+    isActive    Boolean  @default(true)
+    description String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("integrations")
+}
+
+model TechnicalSupportTicket {
+    id          String    @id @default(uuid())
+    title       String
+    description String
+    status      String    @default("OPEN") // OPEN, IN_PROGRESS, RESOLVED, CLOSED
+    priority    String    @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+    reportedBy  String?
+    assignedTo  String?
+    resolvedAt  DateTime?
+    resolution  String?
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    @@map("technical_support_tickets")
+}
+
+// Reports Model
+model Report {
+    id         String    @id @default(uuid())
+    name       String
+    type       String
+    parameters String? // JSON parameters
+    createdBy  String
+    schedule   String? // Cron expression for scheduled reports
+    lastRun    DateTime?
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+
+    @@map("reports")
 }

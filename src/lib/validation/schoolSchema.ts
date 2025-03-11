@@ -1,27 +1,36 @@
 // src/lib/validation/schoolSchema.ts
-import { School } from "@prisma/client";
 import { z } from "zod";
+import { createValidationSchema } from "@/lib/utils/validationFactory";
+import { School } from "@prisma/client";
 
-export const schoolSchema = z.object({
+// Define base fields with their validators
+const schoolBaseFields = {
 	name: z.string().min(1, "School name is required"),
 	address: z.string().min(1, "Address is required"),
-	city: z.string().optional().nullable(),
-	state: z.string().optional().nullable(),
-	zipCode: z.string().optional().nullable(),
+	city: z.string(),
+	state: z.string(),
+	zipCode: z.string(),
 	country: z.string().min(1, "Country is required"),
 	phone: z.string().min(1, "Phone is required"),
 	email: z.string().email("Invalid email format"),
-	website: z.string().url("Invalid website URL").optional().nullable(),
+	website: z.string().url("Invalid website URL"),
+};
+
+// Create the schema using the factory
+export const schoolValidation = createValidationSchema<School>({
+	entityName: "School",
+	baseFields: schoolBaseFields,
+	requiredFields: ["name", "address", "country", "phone", "email"],
+	optionalFields: ["city", "state", "zipCode", "website"],
 });
 
-export const bulkSchoolSchema = z.array(schoolSchema);
+// Export the schemas for use elsewhere
+export const {
+	createSchema: schoolCreateSchema,
+	updateSchema: schoolUpdateSchema,
+	bulkSchema: schoolBulkSchema,
+} = schoolValidation;
 
-export type SchoolData = z.infer<typeof schoolSchema>;
-
-export interface BulkOperationResult {
-	succeeded: School[];
-	failed: {
-		data: SchoolData;
-		error: string;
-	}[];
-}
+// Export the types
+export type SchoolCreateData = z.infer<typeof schoolCreateSchema>;
+export type SchoolUpdateData = z.infer<typeof schoolUpdateSchema>;

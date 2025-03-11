@@ -1,165 +1,92 @@
-// src/services/schoolService.ts
+// src/lib/services/schoolService.ts
 import { prisma } from "@/lib/db/prisma";
+import { School } from "@prisma/client";
+import { createService, BulkOperationResult } from "@/lib/utils/serviceFactory";
 import {
-	schoolSchema,
-	bulkSchoolSchema,
-	SchoolData,
-	BulkOperationResult,
+	schoolCreateSchema,
+	schoolUpdateSchema,
+	schoolBulkSchema,
 } from "@/lib/validation/schoolSchema";
-import { ApiError } from "@/lib/utils/api";
-import logger from "@/lib/utils/logger";
-import { School, Prisma } from "@prisma/client";
 
-export async function createSchool(data: SchoolData): Promise<School> {
-	try {
-		const parsedData = schoolSchema.parse(data);
-		const school = await prisma.school.create({ data: parsedData });
-		logger.info(`Created school ${school.id}: ${school.name}`);
-		return school;
-	} catch (error) {
-		logger.error(`Failed to create school: ${error}`);
-		throw new ApiError(`School creation failed: ${error}`, 400);
-	}
-}
+// Create the school service using the factory
+const schoolService = createService<School, any, any>({
+	modelName: "School",
+	validator: {
+		createSchema: schoolCreateSchema,
+		updateSchema: schoolUpdateSchema,
+		bulkSchema: schoolBulkSchema,
+	},
+	prismaModel: prisma.school,
+	searchFields: ["name", "city", "country", "email"],
+	defaultOrderBy: { name: "asc" },
+});
 
-export async function createMultipleSchools(
-	schools: SchoolData[]
-): Promise<BulkOperationResult> {
-	bulkSchoolSchema.parse(schools);
-
-	const result: BulkOperationResult = {
-		succeeded: [],
-		failed: [],
-	};
-
-	for (const schoolData of schools) {
-		try {
-			const createdSchool = await createSchool(schoolData);
-			result.succeeded.push(createdSchool);
-		} catch (error) {
-			result.failed.push({
-				data: schoolData,
-				error: error instanceof Error ? error.message : String(error),
-			});
-		}
-	}
-
-	return result;
-}
-
-export async function updateSchool(
-	id: string,
-	data: SchoolData
-): Promise<School> {
-	try {
-		const parsedData = schoolSchema.parse(data);
-		const school = await prisma.school.update({
-			where: { id },
-			data: parsedData,
-		});
-		logger.info(`Updated school ${school.id}: ${school.name}`);
-		return school;
-	} catch (error) {
-		logger.error(`Failed to update school ${id}: ${error}`);
-		throw new ApiError(`School update failed: ${error}`, 400);
-	}
-}
-
-export async function updateMultipleSchools(
-	schools: (SchoolData & { id: string })[]
-): Promise<BulkOperationResult> {
-	const result: BulkOperationResult = {
-		succeeded: [],
-		failed: [],
-	};
-
-	for (const schoolData of schools) {
-		try {
-			const updatedSchool = await updateSchool(schoolData.id, schoolData);
-			result.succeeded.push(updatedSchool);
-		} catch (error) {
-			result.failed.push({
-				data: schoolData,
-				error: error instanceof Error ? error.message : String(error),
-			});
-		}
-	}
-
-	return result;
-}
-
-export async function deleteSchool(id: string): Promise<void> {
-	try {
-		await prisma.school.delete({ where: { id } });
-		logger.info(`Deleted school ${id}`);
-	} catch (error) {
-		logger.error(`Failed to delete school ${id}: ${error}`);
-		throw new ApiError(`School deletion failed: ${error}`, 400);
-	}
-}
-
-export async function deleteMultipleSchools(
-	ids: string[]
-): Promise<BulkOperationResult> {
-	const result: BulkOperationResult = {
-		succeeded: [],
-		failed: [],
-	};
-
-	for (const id of ids) {
-		try {
-			const deletedSchool = await prisma.school.delete({ where: { id } });
-			result.succeeded.push(deletedSchool);
-		} catch (error) {
-			result.failed.push({
-				data: { id } as Prisma.SchoolCreateInput,
-				error: error instanceof Error ? error.message : String(error),
-			});
-		}
-	}
-
-	return result;
-}
-
-export async function getSchoolById(id: string): Promise<School> {
-	try {
-		const school = await prisma.school.findUniqueOrThrow({ where: { id } });
-		return school;
-	} catch (error) {
-		logger.error(`Failed to retrieve school ${id}: ${error}`);
-		throw new ApiError(`School retrieval failed: ${error}`, 404);
-	}
-}
-
-export async function getAllSchools(
+// Standard service methods
+export const createSchool = schoolService.create;
+export const updateSchool = schoolService.update;
+export const deleteSchool = schoolService.delete;
+export const getSchoolById = schoolService.getById;
+export const getAllSchools = async (
 	page = 1,
 	pageSize = 10,
 	searchTerm = ""
-): Promise<{ schools: School[]; total: number }> {
-	try {
-		const where: Prisma.SchoolWhereInput = searchTerm
-			? {
-					OR: [
-						{ name: { contains: searchTerm, mode: "insensitive" } },
-						{ city: { contains: searchTerm, mode: "insensitive" } },
-						{ country: { contains: searchTerm, mode: "insensitive" } },
-					],
-			  }
-			: {};
+) => {
+	const { items, total } = await schoolService.getAll(
+		page,
+		pageSize,
+		searchTerm
+	);
+	return { schools: items, total };
+};
 
-		const [schools, total] = await Promise.all([
-			prisma.school.findMany({
-				where,
-				skip: (page - 1) * pageSize,
-				take: pageSize,
-				orderBy: { name: "asc" },
-			}),
-			prisma.school.count({ where }),
-		]);
+// Adapter methods to convert between interfaces
+export const createMultipleSchools = async (
+	data: any[]
+): Promise<{
+	successful: School[];
+	failed: { item: any; error: string }[];
+}> => {
+	const result = await schoolService.createMultiple(data);
+	return {
+		successful: result.succeeded,
+		failed: result.failed.map((item) => ({
+			item: item.data,
+			error: item.error,
+		})),
+	};
+};
 
-		return { schools, total };
-	} catch (error) {
-		logger.error(`Failed to retrieve schools: ${error}`);
-		throw new ApiError(`Schools retrieval failed: ${error}`, 500);
-	}
-}
+export const updateMultipleSchools = async (
+	data: any[]
+): Promise<{
+	successful: School[];
+	failed: { item: any; error: string }[];
+}> => {
+	const result = await schoolService.updateMultiple(data);
+	return {
+		successful: result.succeeded,
+		failed: result.failed.map((item) => ({
+			item: item.data,
+			error: item.error,
+		})),
+	};
+};
+
+export const deleteMultipleSchools = async (
+	ids: string[]
+): Promise<{
+	successful: string[];
+	failed: { id: string; error: string }[];
+}> => {
+	const result = await schoolService.deleteMultiple(ids);
+	return {
+		successful: result.succeeded.map((school) => school.id),
+		failed: result.failed.map((item) => ({
+			id: item.data.id,
+			error: item.error,
+		})),
+	};
+};
+
+// Export the whole service object as default for specific use cases
+export default schoolService;
